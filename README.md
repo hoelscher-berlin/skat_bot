@@ -1,0 +1,1 @@
+Telegram Bot for the card game Skat.
