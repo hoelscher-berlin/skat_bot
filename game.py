@@ -5,7 +5,8 @@ import logging
 #from config import ADMIN_LIST, OPEN_LOBBY, DEFAULT_GAMEMODE, ENABLE_TRANSLATIONS
 from datetime import datetime
 
-#from deck import Deck
+from deck import Deck
+from trick import Trick
 import card as c
 
 class Game(object):
@@ -21,9 +22,10 @@ class Game(object):
     def __init__(self, chat):
         self.chat = chat
         self.last_card = None
-        self.last_trick = None
+        self.last_trick_winner = None
+        self.current_trick = Trick()
 
-        #self.deck = Deck()
+        self.deck = Deck()
 
         self.logger = logging.getLogger(__name__)
 
@@ -44,6 +46,7 @@ class Game(object):
 
     def start(self):
         self.started = True
+        self.deck._fill_classic_()
 
     def set_mode(self, mode):
         self.mode = mode
@@ -63,6 +66,23 @@ class Game(object):
 
         self.current_trick.add_card(card)
 
-        self.logger.info("Playing card " + repr(card))
-        
+        self.logger.info("Player "+str(card.owner)+" is playing card " + repr(card))
+
+        if len(self.current_trick.cards) == 3:
+            # Determine trick winner
+            winnercard = self.current_trick.winner(self.trump)
+
+            # Add trick to trick winner
+            winnercard.owner.won_tricks.append(self.current_trick)
+            
+            # Set last trick winner of game
+            self.last_trick_winner = winnercard.owner
+            
+            self.logger.info("Player "+ str(winnercard.owner) + " won the trick "+str(self.current_trick.cards))
+
+            # Start a new trick
+            self.current_trick = Trick()
+
+            
+
         self.turn()

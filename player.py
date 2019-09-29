@@ -37,6 +37,7 @@ class Player(object):
     def draw_first_hand(self):
         for _ in range(10):
             self.cards.append(self.game.deck.draw())
+            self.cards[-1].owner = self
 
     def __repr__(self):
         return repr(self.user)
@@ -46,25 +47,19 @@ class Player(object):
 
     @property
     def next(self):
-        return self._next if not self.game.reversed else self._prev
+        return self._next
 
     @next.setter
     def next(self, player):
-        if not self.game.reversed:
-            self._next = player
-        else:
-            self._prev = player
+        self._prev = player
 
     @property
     def prev(self):
-        return self._prev if not self.game.reversed else self._next
+        return self._prev
 
     @prev.setter
     def prev(self, player):
-        if not self.game.reversed:
-            self._prev = player
-        else:
-            self._next = player
+        self._next = player
 
     def play(self, card):
         """Plays a card and removes it from hand"""

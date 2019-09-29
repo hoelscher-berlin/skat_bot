@@ -17,14 +17,14 @@ COLOR_ICONS = {
 }
 
 # Values
-SEVEN = '7'
-EIGHT = '8'
-NINE = '9'
-TEN = '10'
-ACE = '11'
+SEVEN = '1'
+EIGHT = '2'
+NINE = '3'
 KING = '4'
-QUEEN = '3'
-JACK = '2'
+QUEEN = '5'
+TEN = '6'
+ACE = '7'
+JACK = '8'
 
 
 VALUES = (SEVEN, EIGHT, NINE, TEN, ACE, KING, QUEEN, JACK)
