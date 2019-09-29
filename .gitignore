@@ -59,3 +59,5 @@ target/
 
 # Database file
 skat.sqlite3
+
+apikey

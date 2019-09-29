@@ -3,7 +3,7 @@ from telegram.ext import Updater, MessageHandler, Filters
 import logging
 from telegram.ext import CommandHandler
 
-updater = Updater(token='954291181:AAFipOT9VDDnbjxLtnQy5qCvBLedcTCWDqM')
+updater = Updater(token='')
 
 dispatcher = updater.dispatcher
 
@@ -11,16 +11,16 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
                     level=logging.DEBUG)
 
 def start(bot, update):
-    bot.send_message(chat_id=update.message.chat_id, text="Ok, starte neues Spiel.")
+  bot.send_message(chat_id=update.message.chat_id, text="Ok, starte neues Spiel.")
 
 def echo(bot, update):
-    bot.send_message(chat_id=update.message.chat_id, text=update.message.text)
+  bot.send_message(chat_id=update.message.chat_id, text=update.message.text)
 
 def unknown(bot, update):
-    bot.send_message(chat_id=update.message.chat_id, text="Dieser Befehl ist mir nicht bekannt.")
+  bot.send_message(chat_id=update.message.chat_id, text="Dieser Befehl ist mir nicht bekannt.")
 
 def sticker_id(bot, update):
-    bot.send_message(chat_id=update.message.chat_id, text="gello:"+update.message.sticker.file_id)
+  bot.send_message(chat_id=update.message.chat_id, text="gello:"+update.message.sticker.file_id)
 
 
 start_handler = CommandHandler('start', start)
