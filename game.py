@@ -9,6 +9,8 @@ from deck import Deck
 from trick import Trick
 import card as c
 
+BIDS = (18,20,22,24,27,30,33,36,40,44,45,48)
+
 class Game(object):
     """ This class represents a game of UNO """
     current_player = None
@@ -16,6 +18,14 @@ class Game(object):
     trump = None
     started = False
     starter = None
+    highest_bid = 0
+    highest_bidder = None
+    reizen_done = False
+    weitersagen = False
+    reizen_sagenoderhoeren = 0
+    sager = None
+    hoerer = None
+    out = None
     #owner = ADMIN_LIST
     #open = OPEN_LOBBY
     
@@ -47,11 +57,17 @@ class Game(object):
         return players
 
     def start(self):
-        self.started = True
-        self.deck._fill_classic_()
-
-    def set_mode(self, mode):
-        self.mode = mode
+        if len(self.players) < 3:
+            self.logger.info("Can't start, not enough players.")
+        else:
+            self.started = True
+            self.deck._fill_classic_()
+            self.logger.info("Game started.")
+            self.sagen_oder_hoeren = 0
+            self.sager = self.current_player.next
+            self.hoerer = self.current_player
+            self.logger.info("Geben: "+str(self.current_player.prev)+" Hören: "+str(self.current_player)+" Sagen: "+str(self.current_player.next))
+            #self.
 
     def turn(self):
         """Marks the turn as over and change the current player"""

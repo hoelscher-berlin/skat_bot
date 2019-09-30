@@ -8,7 +8,7 @@ from random import randint
 
 import card as c
 
-
+BIDS = (18,20,22,24,27,30,33,36,40,44,45,48)
 class Player(object):
     """
     This class represents a player.
@@ -122,3 +122,52 @@ class Player(object):
             sum += trick.value()
 
         return sum
+
+    def bid(self):
+        self.game.highest_bid += 1
+        
+        # ausgeschiedene Person war Sager: 
+        if self.game.weitersagen:
+            if self.game.out == 0:
+                print("a")
+                self.game.hoerer = self.next
+            else:
+                print("b")
+                self.game.hoerer = self.prev
+        else:
+            print("c")
+            self.game.hoerer = self.prev
+
+        self.game.reizen_sagenoderhoeren = 1
+        self.game.highest_bidder = self
+
+    def dont_bid(self):
+        if self.game.weitersagen == True:
+            if self.game.highest_bidder == None:
+                # Geramscht wird nicht! Hören spielt.
+                self.game.highest_bidder = self.game.current_player
+                self.game.highest_bid = 1
+            
+            self.logger.info("Reizen beendet! Gewinner:"+str(self.game.highest_bidder))
+            self.game.reizen_done = True
+            self.game.declarer = self.game.highest_bidder
+        else:
+            self.game.out=0
+            self.game.weitersagen = True
+            self.game.sager = self.next
+
+    def accept_bid(self):
+        self.game.highest_bidder = self
+        self.game.reizen_sagenoderhoeren = 0
+
+    def deny_bid(self):
+        if self.game.weitersagen == True:
+            self.logger.info("Reizen beendet! Gewinner:"+str(self.game.highest_bidder))
+            self.game.reizen_done = True
+            self.game.declarer = self.game.highest_bidder
+        else:
+            self.game.out=1
+            self.game.weitersagen = True
+            self.game.reizen_sagenoderhoeren = 0
+            self.game.sager = self.prev
+
