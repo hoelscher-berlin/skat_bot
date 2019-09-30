@@ -32,3 +32,10 @@ class Trick(object):
                 winnercard = card if card.value > winnercard.value else winnercard 
     
     return winnercard
+
+  def value(self):
+    result = 0
+    for card in self.cards:
+      result += card.points()
+    
+    return result

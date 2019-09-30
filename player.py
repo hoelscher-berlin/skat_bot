@@ -4,6 +4,7 @@
 
 import logging
 from datetime import datetime
+from random import randint
 
 import card as c
 
@@ -66,6 +67,12 @@ class Player(object):
         self.cards.remove(card)
         self.game.play_card(card)
 
+    def play_random(self):
+        playable = self.playable_cards()
+
+        self.play(playable[randint(0,len(playable)-1)])
+
+
     def playable_cards(self):
         """Returns a list of the cards this player can play right now"""
 
@@ -87,7 +94,31 @@ class Player(object):
         """Check a single card if it can be played"""
 
         is_playable = True
-        #last = self.game.last_card
-        self.logger.debug("Checking card " + str(card))
+        last = self.game.last_card
+
+        self.logger.debug("Checking card " + str(card) + " vs last card "+str(last))
+
+        # At the beginning of a trick, every card is playable.
+        if last == None:
+            return True
+
+        if card.color != last.color and self.has_color(last.color):
+            is_playable = False
 
         return is_playable
+
+    def has_color(self, color):
+        has = False
+
+        for card in self.cards:
+            if card.color == color:
+                has = True
+
+        return has
+
+    def result(self):
+        sum = 0
+        for trick in self.won_tricks:
+            sum += trick.value()
+
+        return sum

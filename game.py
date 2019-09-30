@@ -23,6 +23,8 @@ class Game(object):
         self.chat = chat
         self.last_card = None
         self.last_trick_winner = None
+        self.tricks_played = 0
+        self.declarer = None
         self.current_trick = Trick()
 
         self.deck = Deck()
@@ -69,6 +71,8 @@ class Game(object):
         self.logger.info("Player "+str(card.owner)+" is playing card " + repr(card))
 
         if len(self.current_trick.cards) == 3:
+            self.tricks_played += 1
+
             # Determine trick winner
             winnercard = self.current_trick.winner(self.trump)
 
@@ -82,7 +86,39 @@ class Game(object):
 
             # Start a new trick
             self.current_trick = Trick()
+            self.last_card = None
 
-            
+            # Trick winner starts new trick
+            self.current_player = self.last_trick_winner
 
-        self.turn()
+            if self.tricks_played == 10:
+                self.end()
+        else:
+            self.turn()
+
+    def end(self):
+        self.logger.info("Game ended! Determining winner...")
+        
+        players = self.players
+        players.remove(self.declarer)
+
+        defenders_points = 0
+        for player in players:
+            defenders_points += player.result()
+
+        declarer_points = self.declarer.result()
+        # For now: adding points of "Skat" to Declarer
+        skat = Trick()
+        skat.add_card(self.deck.draw())
+        skat.add_card(self.deck.draw())
+        
+        skat_points = skat.value()
+        declarer_points += skat_points
+
+
+        self.logger.info("Defenders: "+str(defenders_points)+", Declarer: "+str(declarer_points))
+
+        if declarer_points >= 61:
+            self.logger.info("Declarer "+str(self.declarer)+" won with "+str(declarer_points)+" points.")
+        else:
+            self.logger.info("Defenders "+str(players[0])+" and "+str(players[1])+" won with "+str(defenders_points)+" points.")

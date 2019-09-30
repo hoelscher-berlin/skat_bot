@@ -2,10 +2,10 @@
 # -*- coding: utf-8 -*-
 
 # Colors
-TILES = 't'
-HEARTS = 'h'
-PIKES = 'p'
-CLOVERS = 'c'
+TILES = 'a'
+HEARTS = 'b'
+PIKES = 'c'
+CLOVERS = 'd'
 
 COLORS = (TILES, HEARTS, PIKES, CLOVERS)
 
@@ -20,12 +20,33 @@ COLOR_ICONS = {
 SEVEN = '1'
 EIGHT = '2'
 NINE = '3'
-KING = '4'
-QUEEN = '5'
+KING = '5'
+QUEEN = '4'
 TEN = '6'
 ACE = '7'
 JACK = '8'
 
+REPRS = {
+    '1':'7',
+    '2':'8',
+    '3':'9',
+    '4':'Q',
+    '5':'K',
+    '6':'10',
+    '7':'A',
+    '8':'J'
+}
+
+POINTS = {
+    SEVEN: 0,
+    EIGHT: 0,
+    NINE: 0,
+    TEN: 10,
+    ACE: 11,
+    JACK: 2,
+    QUEEN: 3,
+    KING: 4
+}
 
 VALUES = (SEVEN, EIGHT, NINE, TEN, ACE, KING, QUEEN, JACK)
 #WILD_VALUES = (ONE, TWO, THREE, FOUR, FIVE, DRAW_TWO, REVERSE, SKIP)
@@ -103,7 +124,7 @@ class Card(object):
         return '%s_%s' % (self.color, self.value)
 
     def __repr__(self):
-        return '%s%s' % (COLOR_ICONS[self.color], self.value.capitalize())
+        return '%s%s' % (COLOR_ICONS[self.color], REPRS[self.value])
 
     def __eq__(self, other):
         """Needed for sorting the cards"""
@@ -112,6 +133,9 @@ class Card(object):
     def __lt__(self, other):
         """Needed for sorting the cards"""
         return str(self) < str(other)
+
+    def points(self):
+        return POINTS[self.value]
 
 
 def from_str(string):
