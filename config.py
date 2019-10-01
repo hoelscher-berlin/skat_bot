@@ -24,4 +24,4 @@ with open("config.json","r") as f:
     config = json.loads(f.read())
 
 TOKEN=config.get("token")
-
+WORKERS=config.get("workers", 32)
